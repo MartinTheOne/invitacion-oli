@@ -432,14 +432,36 @@
 
   /* ---------- Confirmación por WhatsApp ---------- */
 
-  // Botón directo: abre WhatsApp con el mensaje de confirmación ya escrito
+  // Botón directo: festejo con lluvia de corazones y luego abre WhatsApp con el mensaje ya escrito
   function prepararBotonWhatsapp() {
     const numero = String(C.whatsapp || '').replace(/\D/g, '');
     const saludo = invitado ? `¡Hola! Soy ${invitado} y confirmo` : '¡Hola! Confirmo';
     const texto = `${saludo} mi asistencia al primer añito de ${C.nombre} 🎈`;
+    const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
+
     $$('[data-whatsapp]').forEach((enlace) => {
-      enlace.href = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
-      enlace.addEventListener('click', () => Globos.rafaga(5));
+      enlace.href = url;
+      const etiqueta = $('[data-whatsapp-texto]', enlace);
+
+      enlace.addEventListener('click', (e) => {
+        if (reducido) return; // sin animaciones: el enlace abre WhatsApp directo
+        e.preventDefault();
+
+        const caja = enlace.getBoundingClientRect();
+        Globos.lluviaCorazones(caja.left + caja.width / 2, caja.top + caja.height / 2);
+        enlace.animate(
+          [{ transform: 'scale(1)' }, { transform: 'scale(.92)' }, { transform: 'scale(1.06)' }, { transform: 'scale(1)' }],
+          { duration: 450, easing: 'ease-out' }
+        );
+        if (etiqueta) etiqueta.textContent = '¡Gracias, te espero!';
+
+        // Se abre antes de que pase 1 s desde el toque: si no, Safari y otros navegadores lo bloquean
+        setTimeout(() => {
+          const ventana = window.open(url, '_blank');
+          if (ventana) ventana.opener = null;
+          else location.href = url;
+        }, 850);
+      });
     });
   }
 
