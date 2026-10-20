@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="oro-rosa" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f2a7bb"/>
+      <stop offset="1" stop-color="#c9708a"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#oro-rosa)" d="M32 57C14 45 4 35 4 21 4 12 11 5 20 5c5 0 9 3 12 7 3-4 7-7 12-7 9 0 16 7 16 16 0 14-10 24-28 36z"/>
+  <ellipse cx="18" cy="18" rx="4.5" ry="7" transform="rotate(40 18 18)" fill="#fff" opacity=".5"/>
+</svg>
